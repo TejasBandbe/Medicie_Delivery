@@ -1,0 +1,23 @@
+Add Connection String =>
+Server=localhost;Database=pillpulse;Uid=root;Pwd=manager65
+
+Packages to install =>
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Pomelo.EntityFrameworkCore.MySql
+
+Install & Update dotnet EF tool =>
+dotnet tool install --global dotnet-ef
+dotnet tool update --global dotnet-ef
+
+Scaffold MySQL Database =>
+dotnet ef dbcontext scaffold Name=PillPulseDB Pomelo.EntityFrameworkCore.MySql --output-dir Models --context-dir Data --namespace PillPulse.Models --context-namespace PillPulse.Data --context PillPulseContext -f --no-onconfiguring
+
+dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson
+
+
+builder.Services.AddDbContext<PillPulseContext>(
+    options =>
+    {
+        options.UseMySql(builder.Configuration.GetConnectionString("PillPulseDB"),
+        Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.23-mysql"));
+    });
