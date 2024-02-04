@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\janu\\Online Medicine Delivery Project\\pillpulsebackenddotnet\\PillPulseBackendDotNet.csproj": {}
+    "E:\\janu\\Online Medicine Delivery Project\\PillPulseBackendDotNet\\PillPulseBackendDotNet.csproj": {}
   },
   "projects": {
-    "E:\\janu\\Online Medicine Delivery Project\\pillpulsebackenddotnet\\PillPulseBackendDotNet.csproj": {
+    "E:\\janu\\Online Medicine Delivery Project\\PillPulseBackendDotNet\\PillPulseBackendDotNet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\janu\\Online Medicine Delivery Project\\pillpulsebackenddotnet\\PillPulseBackendDotNet.csproj",
+        "projectUniqueName": "E:\\janu\\Online Medicine Delivery Project\\PillPulseBackendDotNet\\PillPulseBackendDotNet.csproj",
         "projectName": "PillPulseBackendDotNet",
-        "projectPath": "E:\\janu\\Online Medicine Delivery Project\\pillpulsebackenddotnet\\PillPulseBackendDotNet.csproj",
+        "projectPath": "E:\\janu\\Online Medicine Delivery Project\\PillPulseBackendDotNet\\PillPulseBackendDotNet.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "E:\\janu\\Online Medicine Delivery Project\\pillpulsebackenddotnet\\obj\\",
+        "outputPath": "E:\\janu\\Online Medicine Delivery Project\\PillPulseBackendDotNet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net7.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -26,8 +26,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net7.0": {
+            "targetAlias": "net7.0",
             "projectReferences": {}
           }
         },
@@ -38,8 +38,8 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net7.0": {
+          "targetAlias": "net7.0",
           "dependencies": {
             "MailKit": {
               "target": "Package",

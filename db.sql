@@ -1,7 +1,7 @@
 create database pillpulse;
 use pillpulse;
 
-create table users(id int primary key auto_increment,
+create table pillpulse_users(id int primary key auto_increment,
 name varchar(30) not null, age int not null, email_id varchar(40) not null unique,
 password varchar(30) not null, mob_no varchar(10) not null unique,
 address varchar(200) not null, pincode varchar(6) not null, 
@@ -36,3 +36,12 @@ total float not null default(unit_price*quantity*(1-discount)),
 x varchar(10), y varchar(10), 
 constraint fk_orderItmes_orderId foreign key(order_id) references orders(id) 
 on update cascade on delete cascade);
+
+create table likes(
+id int primary key auto_increment,
+medicine_id int not null,
+user_id int not null,
+constraint fk_likes_medicineId foreign key (medicine_id) references medicines(id),
+constraint fk_likes_userId foreign key (user_id) references pillpulse_users(id),
+constraint unique_likes unique (medicine_id, user_id)
+);

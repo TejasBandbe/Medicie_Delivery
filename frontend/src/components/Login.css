@@ -1,0 +1,164 @@
+.card-front{
+    padding: 1rem;
+    background: rgba(255,255,255,.1);
+    backdrop-filter: blur(.4rem);
+    text-align: center;
+    border-radius: 2rem;
+    border: 0.1rem solid #fff;
+}
+
+.card-front h1{
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.card-front .box{
+    width: 90%;
+    border-bottom: 0.1rem solid #fff;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.card-front .box .input-box{
+    width: 90%;
+    height: 2rem;
+    outline: none;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.card-front .box .input-box::placeholder{
+    color: rgba(255,255,255,.5);
+}
+
+.card-front .check{
+    width: 90%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+.card-front .check input{
+    transform: scale(1.2);
+    margin-right: 0.5rem;
+
+    @media (max-width: 768px){
+        transform: scale(1);
+    }
+}
+.card-front .check input:checked{
+    accent-color: #000;
+}
+.card-front .check span{
+    font-size: 1.1rem;
+}
+
+.card-front .btns{
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding: .5rem;
+    border-radius: 0.5rem;
+    width: 40%;
+    color: #fff;
+    transition: .2s;
+}
+
+.card-front .btns:hover{
+    transform: scale(0.9);
+}
+
+.card-front .links{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+
+    @media(max-width: 1400px){
+        grid-template-columns: repeat(1, 1fr);
+    }
+    @media(max-width: 1200px){
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1rem 1rem;
+        font-size: 1rem;
+    }
+}
+
+.icon{
+    margin-right: 0.5rem;
+    color: rgba(255,255,255,.5);
+    font-size: 1.2rem;
+}
+
+.icon-eye{
+    cursor: pointer;
+    text-align: right;
+    display: flex;
+}
+
+#eye2{
+    display: none;
+}
+
+.card-front a{
+    color: rgba(255,255,255,.5);
+}
+
+.card-front a:hover{
+    color: #fff;
+}
+
+.card-front .register-link{
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: rgba(255,255,255,.5);
+    transition: 0.2s ease-in-out;
+    @media(max-width: 1200px){
+        font-size: 1rem;
+    }
+}
+
+.card-front .register-link:hover{
+    transform: scale(1.1);
+    color: white;
+    text-shadow: 0.2rem 0.2rem 0.4rem rgb(255, 255, 255);
+}
+
+
+
+
+@media (max-width: 768px){
+    .card-front h1{
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    .card-front .box .input-box{
+        font-size: 1rem;
+    }
+    .card-front .box .icon{
+        font-size: 1rem;
+    }
+    .card-front .btns{
+        width: 60%;
+    }
+    .card-front .check span{
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px){
+    .card-front .btns{
+        padding: 0.3rem;
+    }
+    .card-front .links{
+        padding: 1rem 0;
+    }
+    .card-front .box{
+        width: 100%;
+    }
+    .card-front .box .input-box{
+        width: 100%;
+    }
+}
+
