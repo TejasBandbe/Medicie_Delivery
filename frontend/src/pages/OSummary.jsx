@@ -30,12 +30,18 @@ function OSummary() {
   const [mm, setMm] = useState('');
   const [yy, setYy] = useState('');
   const [cardVerify, setCardVerify] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [payMethod, setPayMethod] = useState('');
+  const [dDate, setDDate] = useState('');
+  const [showPayOptions, setShowPayOptions] = useState(false);
+  const [showChangeBtn, setShowChangeBtn] = useState(true);
+  const [showPayBtn, setShowPayBtn] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
 
-  }, [showUpi, showCard]);
+  }, [showUpi, showCard, orderPlaced]);
 
   useEffect(() => {
     const load = async() => {
@@ -57,6 +63,7 @@ function OSummary() {
           }else if(res.status === 200){
             setCart(res.data);
             setValidUser(true);
+            setOrderPlaced(false);
 
             var sum = 0;
             var saving = 0;
@@ -75,8 +82,11 @@ function OSummary() {
             for(var i = 1; i <= 15; i++){
               futureYears.push(curyear + i);
             }
-            log(futureYears);
             setYears(futureYears);
+
+            setTimeout(() => {
+              disableButton2();
+            }, 500);
           }
         })
         .catch(error => {
@@ -118,23 +128,9 @@ function OSummary() {
     
   }, []);
 
-  const enableOSummary = () => {
-    var osummary = document.getElementById('osummary');
-    osummary.style.opacity = 1;
-
-    var button2 = document.getElementById("button2");
-    button2.removeAttribute("disabled");
-  };
-
-  const enablePayment = () => {
-    var payment = document.getElementById('payment');
-    payment.style.opacity = 1;
-
-  };
-
-  const enablePayButton = () => {
-    var button3 = document.getElementById("button3");
-    button3.removeAttribute("disabled");
+  const disableButton2 = () => {
+    var button2 = document.getElementById('button2');
+    button2.disabled = true;
   };
 
   const disablePayButton = () => {
@@ -142,31 +138,52 @@ function OSummary() {
     button3.disabled = true;
   };
 
+  const enableOSummary = () => {
+    var osummary = document.getElementById('osummary');
+    osummary.style.opacity = 1;
+
+    var button2 = document.getElementById("button2");
+    button2.removeAttribute("disabled");
+
+    setShowChangeBtn(false);
+  };
+
+  const enablePayment = () => {
+    debugger;
+    var payment = document.getElementById('payment');
+    payment.style.opacity = 1;
+    setShowPayOptions(true);
+  };
+
   const togglePaymentOptions = (option) => {
+
     if(option === 'upi'){
       setShowCard(false);
       setShowUpi(true);
       setCardVerify(false);
+      setPayMethod('upi');
 
       setCardNo('');
       setMm('');
       setYy('');
       setCvv('');
 
-      disablePayButton();
+      setShowPayBtn(false);
     }else if(option === 'card'){
       setShowCard(true);
       setShowUpi(false);
       setUpiverify(false);
+      setPayMethod('credit/debit card');
 
       setUpi('');
 
-      disablePayButton();
+      setShowPayBtn(false);
     }else if(option === 'cod'){
       setShowCard(false);
       setShowUpi(false);
       setUpiverify(false);
       setCardVerify(false);
+      setPayMethod('cash on delivery');
 
       setCardNo('');
       setMm('');
@@ -174,7 +191,7 @@ function OSummary() {
       setCvv('');
       setUpi('');
 
-      enablePayButton();
+      setShowPayBtn(true);
     }
   };
 
@@ -189,7 +206,7 @@ function OSummary() {
       return;
     }
     setUpiverify(true);
-    enablePayButton();
+    setShowPayBtn(true);
   };
 
   const formatCardNumber = () => {
@@ -221,7 +238,7 @@ function OSummary() {
       return;
     }
     setCardVerify(true);
-    enablePayButton();
+    setShowPayBtn(true);
   }
 
   const disableContinue = () => {
@@ -229,15 +246,50 @@ function OSummary() {
     var contButton = document.getElementById("contButton");
     contButton.disabled = true;
 
-    disablePayButton();
+    var button2 = document.getElementById("button2");
+    button2.disabled = true;
   };
 
   const enableContinue = () => {
     setAddressEdit(false);
     var contButton = document.getElementById("contButton");
     contButton.removeAttribute("disabled");
+  };
 
-    enablePayButton();
+  const placeOrder = () => {
+    debugger;
+    var userId = sessionStorage.getItem("userId") ? sessionStorage.getItem("userId") : 0;
+    var jwtToken = sessionStorage.getItem("token") ? sessionStorage.getItem("token") : 'notoken';
+    const url = createurl('/users/placeorder');
+
+    axios.post(url,
+      {
+        "userId": userId,
+        "totalAmt": totalAmt,
+      },
+      {
+        headers: {
+            'authorization': `Bearer ${jwtToken}`
+        }
+      })
+      .then(res => {
+        debugger;
+        if(res.status === 400 || res.status === 401){
+            setValidUser(false);
+        }else if(res.status === 200){
+            setValidUser(true);
+            if(res.data.message === "order placed"){
+              toast.success("order placed", {autoClose: 2000});
+              setOrderPlaced(true);
+              setDDate(res.data.deliveryTime);
+            }
+        }
+      })
+      .catch(error => {
+        debugger;
+        setValidUser(false);
+        toast.error("Something went wrong", {autoClose: 1500});
+      });
   };
 
   return (
@@ -246,7 +298,9 @@ function OSummary() {
     validUser ? <Nav/> : <Navw/>
 }
 
-<div className="page">
+{
+  !orderPlaced ? 
+  <div className="page">
 
   <div className="section1">
     <div className="address card">
@@ -255,11 +309,18 @@ function OSummary() {
       <div className="top">
         <div className="heading">Deliver to:</div>
 {
+  showChangeBtn ? 
+<>
+  {
   addressEdit ? 
   <div className="btn btn-success" onClick={enableContinue}>Save</div>
   : 
   <div className="btn btn-warning" onClick={disableContinue}>Change</div>
-} 
+  }
+</>
+  :
+  <></>
+}
       </div>
 
       <div className="mid">{profile.name}</div>
@@ -312,9 +373,9 @@ function OSummary() {
 
       </div>
 
-      <div className="button" onClick={enablePayment}>
-        <button className='btn btn-warning' id="button2" disabled
-        ><a href="#payment">Continue</a></button>
+      <div className="button">
+      <button className='btn btn-warning' id="button2" onClick={enablePayment}> 
+        <a href="#payment">Continue</a> </button>
       </div>
       
     </div>
@@ -326,7 +387,8 @@ function OSummary() {
       Select Payment Option:
       </div>
 
-      <div className='radioGroup'>
+      {
+        showPayOptions ? <div className='radioGroup'>
         <div className='radio'>
           <input className='mx-2' type="radio" name="paymentRadio" id=""
            onClick={() => {togglePaymentOptions('upi')}}/>
@@ -374,7 +436,7 @@ function OSummary() {
     <div className='flex'>
 
     <div className='date'>
-    <select name="" id="input" className="" onChange={(e) => {setMm(e.target.value)}}>
+    <select name="" className="" onChange={(e) => {setMm(e.target.value)}}>
       <option value="">MM</option>
       <option value="1">01</option>
       <option value="2">02</option>
@@ -389,11 +451,11 @@ function OSummary() {
       <option value="11">11</option>
       <option value="12">12</option>
     </select>
-    <select name="" id="input" className="" onChange={(e) => {setYy(e.target.value)}}>
+    <select name="" className="" onChange={(e) => {setYy(e.target.value)}}>
       <option value="">YY</option>
       {
         years.map((year) => (
-          <option value={year}>{year}</option>
+          <option key={year} value={year}>{year}</option>
         ))
       }
     </select>
@@ -427,13 +489,35 @@ function OSummary() {
           Cash on delivery
         </div>
       </div>
+        :
+        <></>
+      }
 
-      <div className='button'><button className='btn btn-warning' id="button3" disabled>
-        Pay ₹ {Math.round(totalAmt*100)/100}</button></div>
+{
+  showPayBtn ? 
+    <div className='button' onClick={placeOrder}><button className='btn btn-warning' id="button3">
+      Pay ₹ {Math.round(totalAmt*100)/100}</button>
+    </div> :
+    <></>
+}  
     </div>
   </div>
 
 </div>
+  : 
+  <div className='orderplaced'>
+    <div className="box">
+      <div className='green'>
+        <i className="fa-regular fa-circle-check"></i><br/>
+        Order placed successfully!!
+      </div>
+      <div className='p'>Estimated delivery date<br/>{dDate}</div>
+      <div className='p'>Total Amount<br/>₹ {totalAmt}</div>
+      <div className='p'>Payment method:<br/>{payMethod}</div>
+    </div>
+  </div>
+}
+
 
 <Footer/>
     </Container>
@@ -886,6 +970,78 @@ background-color: #eaf5ff;
 
   }
 
+}
+
+.orderplaced{
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 2rem;
+min-height: 50vh;
+
+  .box{
+    width: 40%;
+    background-color: #427baa;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+
+    @media(max-width: 1100px){
+      width: 50%;
+    }
+    @media(max-width: 768px){
+      width: 70%;
+    }
+    @media(max-width: 600px){
+      gap: 0.5rem;
+    }
+    @media(max-width: 450px){
+      width: 85%;
+    }
+
+    div{
+      color: white;
+      font-size: 1.2rem;
+      text-align: center;
+
+      i{
+        font-size: 2rem;
+
+        @media(max-width: 1000px){
+          font-size: 1.5rem;
+        }
+        @media(max-width: 600px){
+          font-size: 1.2rem;
+        }
+      }
+    }
+
+    .green{
+      font-size: 1.5rem;
+      color: white;
+      font-weight: 700;
+      text-shadow: 0 0 0.2rem green, 0 0 0.4rem green;
+
+      @media(max-width: 1000px){
+        font-size: 1.2rem;
+      }
+      @media(max-width: 600px){
+        font-size: 1rem;
+      }
+    }
+
+    .p{
+      @media(max-width: 1000px){
+        font-size: 1rem;
+      }
+      @media(max-width: 600px){
+        font-size: 0.8rem;
+      }
+    }
+  }
 }
 `;
 

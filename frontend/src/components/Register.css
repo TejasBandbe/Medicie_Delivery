@@ -11,9 +11,6 @@
     margin-bottom: 2rem;
     font-weight: 700;
     
-    
-    /* color: #fff3c7; */
-    /* background-color: rgb(18, 43, 64); */
     @media(max-width: 1050px){
         font-size: 1.5rem;
     }
@@ -40,6 +37,8 @@
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
+
+    /* color: #73b4ea; */
 
     @media (max-width: 768px){
         margin-bottom: 1rem;

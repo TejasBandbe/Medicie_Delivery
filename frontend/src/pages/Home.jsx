@@ -6,9 +6,7 @@ import Categories from '../components/Categories';
 import TopProducts from '../components/TopProducts';
 import styled from 'styled-components';
 import Nav from '../components/Nav';
-import { toast } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
-import { createurl, log, constants } from '../env';
+import { createurl, log } from '../env';
 import axios from 'axios';
 import MappedData from '../components/MappedData';
 
@@ -90,7 +88,7 @@ function Home() {
 
   return (<Container>
     {
-      validUser ? <Nav/> : <Navw/>
+      validUser ? <Nav homeData={homeData}/> : <Navw/>
     }
     <Corousel/>
     <Categories validUser={validUser}/>

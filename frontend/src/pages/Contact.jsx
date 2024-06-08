@@ -21,45 +21,41 @@ function Contact() {
   const form = useRef();
 
   useEffect(() => {
-    const getData = () => {
-        debugger;
-    var userId = sessionStorage.getItem("userId") ? sessionStorage.getItem("userId") : 0;
-    var jwtToken = sessionStorage.getItem("token") ? sessionStorage.getItem("token") : 'notoken';
-    const url = createurl('/users/getprofile');
-
-    axios.post(url,
-        {
-        "userId": userId,
-        },
-        {
-        headers: {
-            'authorization': `Bearer ${jwtToken}`
-        }
-        })
-        .then(res => {
-            debugger;
-        if(res.status === 400 || res.status === 401){
-            setValidUser(false);
-        }else if(res.status === 200){
-            setValidUser(true);
-            setName(res.data[0].name);
-            setEmail(res.data[0].email_id);
-            setMobno(res.data[0].mob_no);
-        }
-        })
-        .catch(error => {
-            debugger;
-            setValidUser(false);
-            log(error);
-        });
-    };
-
     getData();
   }, []);
 
-  useEffect(() => {
+  const getData = () => {
+    debugger;
+var userId = sessionStorage.getItem("userId") ? sessionStorage.getItem("userId") : 0;
+var jwtToken = sessionStorage.getItem("token") ? sessionStorage.getItem("token") : 'notoken';
+const url = createurl('/users/getprofile');
 
-  }, [msg]);
+axios.post(url,
+    {
+    "userId": userId,
+    },
+    {
+    headers: {
+        'authorization': `Bearer ${jwtToken}`
+    }
+    })
+    .then(res => {
+        debugger;
+    if(res.status === 400 || res.status === 401){
+        setValidUser(false);
+    }else if(res.status === 200){
+        setValidUser(true);
+        setName(res.data[0].name);
+        setEmail(res.data[0].email_id);
+        setMobno(res.data[0].mob_no);
+    }
+    })
+    .catch(error => {
+        debugger;
+        setValidUser(false);
+        log(error);
+    });
+};
 
   const sendMail = (e) => {
     debugger;
@@ -85,7 +81,9 @@ function Contact() {
           debugger;
             log(result.text);
             toast.success("Message sent. We will get back to you!", {autoClose: 2000});
-            setMsg('');
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
         }, (error) => {
             debugger;
             log(error.text);

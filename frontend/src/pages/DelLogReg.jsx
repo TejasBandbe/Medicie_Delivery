@@ -85,8 +85,8 @@ function DelLogReg() {
 
   <div className="row logreg">
     <div className="col-xl-4 col-md-3 col-0">
-      <div class="home" onClick={home}>
-          <i class="fa fa-home"></i>
+      <div className="home" onClick={home}>
+          <i className="fa fa-home"></i>
       </div>
     </div>
     <div className="col-xl-4 col-md-6 col-12 main-box">

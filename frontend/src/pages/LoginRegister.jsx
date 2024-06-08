@@ -76,7 +76,7 @@ function LoginRegister() {
           else{
             var id = res.data.user_id;
             var token = res.data.token;
-            sessionStorage.setItem("user_id", id);
+            sessionStorage.setItem("userId", id);
             sessionStorage.setItem("token", token);
             history.push('/admin');
           }

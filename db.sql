@@ -45,3 +45,10 @@ constraint fk_likes_medicineId foreign key (medicine_id) references medicines(id
 constraint fk_likes_userId foreign key (user_id) references pillpulse_users(id),
 constraint unique_likes unique (medicine_id, user_id)
 );
+
+create table delivery(id int primary key auto_increment,
+order_id int not null, user_id int not null,
+constraint unique_orderId_userId unique(order_id, user_id),
+constraint fk_delivery_orderId foreign key(order_id) references orders(id),
+constraint fk_delivery_userId foreign key(user_id) references pillpulse_users(id)
+);

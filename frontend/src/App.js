@@ -11,8 +11,14 @@ import Cat from "./pages/Cat";
 import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
 import OSummary from "./pages/OSummary";
+import MyOrders from "./pages/MyOrders";
 
 import DelLogReg from "./pages/DelLogReg";
+import AdminHome from "./pages/AdminHome";
+import AdminProducts from "./pages/AdminProducts";
+import AdminEditProduct from "./pages/AdminEditProduct";
+
+import DeliveryHome from "./pages/DeliveryHome";
 
 function App() {
   return (
@@ -28,8 +34,15 @@ function App() {
           <Route exact path='/product' component={ProductPage}></Route>
           <Route exact path='/cart' component={Cart}></Route>
           <Route exact path='/ordersummary' component={OSummary}></Route>
+          <Route exact path='/myorders' component={MyOrders}></Route>
 
           <Route exact path="/dellogin" component={DelLogReg}></Route>
+
+          <Route exact path='/admin' component={AdminHome}></Route>
+          <Route exact path='/products' component={AdminProducts}></Route>
+          <Route exact path='/editproduct' component={AdminEditProduct}></Route>
+
+          <Route exact path='/delivery' component={DeliveryHome}></Route>
         </Router>
         <ToastContainer
         position='top-center'

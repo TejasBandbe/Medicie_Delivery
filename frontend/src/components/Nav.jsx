@@ -1,12 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { createurl, log, constants } from '../env';
+import axios from 'axios';
 
 function Nav() {
-
+  const [homeData, setHomeData] = useState([]);
   const [showMenus, setShowMenus] = useState(false);
+  const [input, setInput] = useState('');
+  const [results, setResults] = useState([]);
 
   const history = useHistory();
+
+  useEffect(() => {
+    const getAllMedicines = () => {
+      debugger;
+      var userId = sessionStorage.getItem("userId") ? sessionStorage.getItem("userId") : 0;
+      var jwtToken = sessionStorage.getItem("token") ? sessionStorage.getItem("token") : 'notoken';
+      const url = createurl('/users/home');
+      axios.post(url,
+        {
+          "userId": userId,
+        },
+        {
+          headers: {
+              'authorization': `Bearer ${jwtToken}`
+          }
+        })
+        .then(res => {
+          debugger;
+          if(res.status === 400 || res.status === 401){
+            log(res.data);
+            // setShowMenus(false);
+          }else if(res.status === 200){
+            setHomeData(res.data);
+            // setShowMenus(false);
+          }
+        })
+        .catch(error => {
+          debugger;
+          log(error);
+          // setShowMenus(false);
+        });
+    };
+
+    getAllMedicines();
+  }, []);
 
   const goToHome = () => {
     history.push('/');
@@ -34,6 +73,33 @@ function Nav() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('cat');
     history.push('/');
+    window.location.reload();
+  };
+
+  const goToMyOrders = () => {
+    history.push('/myorders');
+  };
+
+  const fetchData = (value) => {
+    const results = homeData.filter((medicine) => {
+      return value && medicine && medicine.name && medicine.name.toLowerCase().includes(value);
+    });
+    setResults(results);
+    console.log(results);
+  };
+
+  const handleChange = (value) => {
+    setInput(value);
+    fetchData(value);
+  };
+
+  const open = (id) => {
+    sessionStorage.setItem('prodId', id);
+      history.push('/product');
+
+      setTimeout(() => {
+        window.location.reload();
+      },500);
   };
 
   return (
@@ -46,7 +112,8 @@ function Nav() {
     </div>
     <div className="search">
         <i className="fa-solid fa-magnifying-glass"></i>
-        <input type="search" placeholder='search for medicines'/>
+        <input type="search" placeholder='search for medicines' 
+        value={input} onChange={(e) => {handleChange(e.target.value)}}/>
     </div>
     <div className="menu" onClick={() => {setShowMenus(!showMenus)}}>
       <div>
@@ -54,6 +121,18 @@ function Nav() {
       </div>
       <div>Menu</div>
     </div>
+</div>
+
+<div className='search-result-container'>
+  <div className="search-result" id="search-result">
+{
+  results.map((medicine) => (
+    <div className="result" key={medicine.id} onClick={() => {open(medicine.id)}}>
+      {medicine.name}
+    </div>
+  ))
+}
+  </div>
 </div>
 
 {
@@ -64,7 +143,7 @@ function Nav() {
     <i className="fa-solid fa-cart-shopping"></i>
     <span>My Cart</span>
   </div>
-  <div className="menu">
+  <div className="menu" onClick={goToMyOrders}>
     <i className="fa-solid fa-bag-shopping"></i>
     <span>My Orders</span>
   </div>
@@ -273,6 +352,34 @@ const Container = styled.div`
       background-color: #265073;
     }
   }
+}
+
+.search-result-container{
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  position: absolute;
+  width: 100%;
+  left: 2%;
+
+  .search-result{
+    max-height: 10rem;
+    background-color: white;
+    width: 30%;
+    overflow-y: auto;
+    box-shadow: 0rem 0rem 1rem #000;
+
+    .result{
+      cursor: pointer;
+      padding-left: 1.5rem;
+    }
+
+    .result:hover{
+      background-color: rgba(200,200,200,0.9);
+    }
+  }
+
+  
 }
 `;
 
